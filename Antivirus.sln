@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Antivirus.Domain", "Antivirus.Domain\Antivirus.Domain.csproj", "{4D05D35A-218D-460B-B574-29B63824B8CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Antivirus.Domain", "Antivirus.Domain\Antivirus.Domain.csproj", "{4D05D35A-218D-460B-B574-29B63824B8CE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Antivirus.Application", "Antivirus.Application\Antivirus.Application.csproj", "{880FE604-BA1A-495A-A684-E1B7C39DFAAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Antivirus.CMD", "Antivirus.CMD\Antivirus.CMD.csproj", "{76F5FD0A-7C75-46F7-B86D-1A39F3D28FC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{4D05D35A-218D-460B-B574-29B63824B8CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D05D35A-218D-460B-B574-29B63824B8CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D05D35A-218D-460B-B574-29B63824B8CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{880FE604-BA1A-495A-A684-E1B7C39DFAAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{880FE604-BA1A-495A-A684-E1B7C39DFAAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{880FE604-BA1A-495A-A684-E1B7C39DFAAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{880FE604-BA1A-495A-A684-E1B7C39DFAAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76F5FD0A-7C75-46F7-B86D-1A39F3D28FC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76F5FD0A-7C75-46F7-B86D-1A39F3D28FC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76F5FD0A-7C75-46F7-B86D-1A39F3D28FC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76F5FD0A-7C75-46F7-B86D-1A39F3D28FC1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

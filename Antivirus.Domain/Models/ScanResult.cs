@@ -28,17 +28,17 @@ public class ScanResult
     /// <summary>
     ///     Total evil javascripts detects.
     /// </summary>
-    public int TotalEvilJSDetects { get; set; }
+    public int TotalEvilJsDetects { get; set; }
 
     /// <summary>
     ///     Total rm -rf detects.
     /// </summary>
-    public int TotalRMDetects { get; set; }
+    public int TotalRemoveDetects { get; set; }
 
     /// <summary>
     ///     Total Rundll32 sus.dll SusEntry detects.
     /// </summary>
-    public int TotalRunDLLDetects { get; set; }
+    public int TotalRunDllDetects { get; set; }
 
     /// <summary>
     ///     Total errors.
@@ -68,9 +68,9 @@ public class ScanResult
             var res = new ScanResult
             {
                 TotalProcessedFiles = first.TotalProcessedFiles + second.TotalProcessedFiles,
-                TotalEvilJSDetects = first.TotalEvilJSDetects + second.TotalEvilJSDetects,
-                TotalRMDetects = first.TotalRMDetects + second.TotalRMDetects,
-                TotalRunDLLDetects = first.TotalRunDLLDetects + second.TotalRunDLLDetects,
+                TotalEvilJsDetects = first.TotalEvilJsDetects + second.TotalEvilJsDetects,
+                TotalRemoveDetects = first.TotalRemoveDetects + second.TotalRemoveDetects,
+                TotalRunDllDetects = first.TotalRunDllDetects + second.TotalRunDllDetects,
                 TotalErrors = first.TotalErrors + second.TotalErrors,
                 ErrorMessages = first.ErrorMessages.Concat(second.ErrorMessages).ToList(),
                 ExecutionTime = first.ExecutionTime + second.ExecutionTime
