@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Antivirus.Application.Interfaces;
+using Antivirus.Domain.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Antivirus.API.Controllers
 {
@@ -7,10 +9,18 @@ namespace Antivirus.API.Controllers
     [Route("api/[controller]")]
     public class ScannerManagerController : Controller
     {
-        [HttpGet]
-        public async Task<int> Test()
+        private readonly IScanService _scanService;
+
+        public ScannerManagerController(IScanService scanService)
         {
-            return 1;
+            _scanService = scanService;
+        }
+
+        [HttpGet]
+        public async Task<ScanResult> Test(string path)
+        {
+            var result = await _scanService.ScanAsync(path);
+            return result;
         }
     }
 }

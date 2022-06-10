@@ -80,7 +80,7 @@ public class ScanService : IScanService
                 var isJs = Path.GetExtension(file).Equals(".js");
                 Parallel.ForEach(File.ReadLines(file), line =>
                 {
-                    ProcessMalwareType(res, LineAnalyzer.Analyze(line, isJs));
+                    ProcessMalwareType(ref res, LineAnalyzer.Analyze(line, isJs));
                 });
             }
             catch (Exception)
@@ -97,7 +97,7 @@ public class ScanService : IScanService
     /// </summary>
     /// <param name="res"> Scan result. </param>
     /// <param name="malwareType"> Malware type. </param>
-    private void ProcessMalwareType(ScanResult res, Malware malwareType)
+    private void ProcessMalwareType(ref ScanResult res, Malware malwareType)
     {
         lock (_locker)
         {

@@ -1,4 +1,5 @@
 using System.Reflection;
+using Antivirus.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 RegisterServices(builder.Services, builder.Configuration);
@@ -9,6 +10,7 @@ app.Run();
 
 void RegisterServices(IServiceCollection services, IConfiguration config)
 {
+    services.AddApplication();
     services.AddEndpointsApiExplorer();
     services.AddControllers();
 
