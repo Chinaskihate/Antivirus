@@ -55,10 +55,9 @@ public class ScanService : IScanService
                 }
             });
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             res.TotalErrors++;
-            res.ErrorMessages.Add(ex.Message);
         }
 
         return res;
@@ -84,10 +83,9 @@ public class ScanService : IScanService
                     ProcessMalwareType(res, LineAnalyzer.Analyze(line, isJs));
                 });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 res.TotalErrors++;
-                res.ErrorMessages.Add(ex.Message);
             }
         });
 

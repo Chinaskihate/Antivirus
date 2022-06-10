@@ -5,10 +5,15 @@ namespace Antivirus.Domain.Models;
 /// <summary>
 ///     Result of scan.
 /// </summary>
-public class ScanResult
+public struct ScanResult
 {
     private static readonly object Locker = new();
-    private int _totalProcessedFiles;
+    private int _totalProcessedFiles = 0;
+
+    public ScanResult()
+    {
+        
+    }
 
     /// <summary>
     ///     Total files processed.
@@ -28,32 +33,27 @@ public class ScanResult
     /// <summary>
     ///     Total evil javascripts detects.
     /// </summary>
-    public int TotalEvilJsDetects { get; set; }
+    public int TotalEvilJsDetects { get; set; } = 0;
 
     /// <summary>
     ///     Total rm -rf detects.
     /// </summary>
-    public int TotalRemoveDetects { get; set; }
+    public int TotalRemoveDetects { get; set; } = 0;
 
     /// <summary>
     ///     Total Rundll32 sus.dll SusEntry detects.
     /// </summary>
-    public int TotalRunDllDetects { get; set; }
+    public int TotalRunDllDetects { get; set; } = 0;
 
     /// <summary>
     ///     Total errors.
     /// </summary>
-    public int TotalErrors { get; set; }
-
-    /// <summary>
-    ///     Error messages.
-    /// </summary>
-    public List<string> ErrorMessages { get; set; } = new();
+    public int TotalErrors { get; set; } = 0;
 
     /// <summary>
     ///     Scan execution time.
     /// </summary>
-    public TimeSpan ExecutionTime { get; set; }
+    public TimeSpan ExecutionTime { get; set; } = TimeSpan.Zero;
 
     /// <summary>
     ///     Concats two scan results.
@@ -72,7 +72,6 @@ public class ScanResult
                 TotalRemoveDetects = first.TotalRemoveDetects + second.TotalRemoveDetects,
                 TotalRunDllDetects = first.TotalRunDllDetects + second.TotalRunDllDetects,
                 TotalErrors = first.TotalErrors + second.TotalErrors,
-                ErrorMessages = first.ErrorMessages.Concat(second.ErrorMessages).ToList(),
                 ExecutionTime = first.ExecutionTime + second.ExecutionTime
             };
 

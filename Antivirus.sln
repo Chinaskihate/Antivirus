@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Antivirus.Application", "An
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Antivirus.CMD", "Antivirus.CMD\Antivirus.CMD.csproj", "{76F5FD0A-7C75-46F7-B86D-1A39F3D28FC1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Antivirus.API", "Antivirus.API\Antivirus.API.csproj", "{990FA639-CCB5-46C3-A876-FB8EA001FCEB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{76F5FD0A-7C75-46F7-B86D-1A39F3D28FC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76F5FD0A-7C75-46F7-B86D-1A39F3D28FC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76F5FD0A-7C75-46F7-B86D-1A39F3D28FC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{990FA639-CCB5-46C3-A876-FB8EA001FCEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{990FA639-CCB5-46C3-A876-FB8EA001FCEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{990FA639-CCB5-46C3-A876-FB8EA001FCEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{990FA639-CCB5-46C3-A876-FB8EA001FCEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
