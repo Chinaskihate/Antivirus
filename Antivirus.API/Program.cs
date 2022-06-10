@@ -1,3 +1,5 @@
+using System.Reflection;
+
 var builder = WebApplication.CreateBuilder(args);
 RegisterServices(builder.Services, builder.Configuration);
 var app = builder.Build();
@@ -8,8 +10,16 @@ app.Run();
 void RegisterServices(IServiceCollection services, IConfiguration config)
 {
     services.AddEndpointsApiExplorer();
-    services.AddSwaggerGen();
     services.AddControllers();
+
+    services.AddVersionedApiExplorer(options => options.GroupNameFormat = "'v'VVV");
+    services.AddSwaggerGen(c =>
+    {
+        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+        c.IncludeXmlComments(xmlPath);
+    });
+    services.AddApiVersioning();
 }
 
 void Configure(IApplicationBuilder app, IWebHostEnvironment env)
