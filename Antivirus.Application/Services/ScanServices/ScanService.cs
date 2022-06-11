@@ -1,9 +1,8 @@
 ﻿using System.Diagnostics;
-using System.Text.RegularExpressions;
-using Antivirus.Application.Interfaces;
+using Antivirus.Application.Interfaces.ScanServices;
 using Antivirus.Domain.Models;
 
-namespace Antivirus.Application.Services;
+namespace Antivirus.Application.Services.ScanServices;
 
 public class ScanService : IScanService
 {
@@ -78,10 +77,8 @@ public class ScanService : IScanService
             {
                 CurrentFile = file;
                 var isJs = Path.GetExtension(file).Equals(".js");
-                Parallel.ForEach(File.ReadLines(file), line =>
-                {
-                    ProcessMalwareType(ref res, LineAnalyzer.Analyze(line, isJs));
-                });
+                Parallel.ForEach(File.ReadLines(file),
+                    line => { ProcessMalwareType(ref res, LineAnalyzer.Analyze(line, isJs)); });
             }
             catch (Exception)
             {

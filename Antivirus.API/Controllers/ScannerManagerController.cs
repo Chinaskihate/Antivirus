@@ -1,4 +1,6 @@
-﻿using Antivirus.Application.Interfaces;
+﻿using Antivirus.Application.Interfaces.ScanManagers;
+using Antivirus.Application.Interfaces.ScanServices;
+using Antivirus.Application.Models;
 using Antivirus.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,21 +8,27 @@ namespace Antivirus.API.Controllers
 {
     [ApiController]
     [ApiVersionNeutral]
-    [Route("")]
-    //[Route("api/[controller]")]
+    [Route("api/[controller]")]
     public class ScannerManagerController : Controller
     {
-        private readonly IScanService _scanService;
+        private readonly IScanManager _scanManager;
 
-        public ScannerManagerController(IScanService scanService)
+        public ScannerManagerController(IScanManager scanManager)
         {
-            _scanService = scanService;
+            _scanManager = scanManager;
         }
 
-        [HttpGet("test")]
-        public async Task<ScanResult> Test(string path)
+        [HttpPost]
+        public async Task<Guid> CreateScan(string path)
         {
-            var result = await _scanService.ScanAsync(path);
+            var result = _scanManager.CreateScan(path);
+            return result;
+        }
+
+        [HttpGet]
+        public async Task<ScanStatus> GetScanStatus(Guid id)
+        {
+            var result = _scanManager.GetStatus(id);
             return result;
         }
     }
