@@ -6,7 +6,8 @@ namespace Antivirus.API.Controllers
 {
     [ApiController]
     [ApiVersionNeutral]
-    [Route("api/[controller]")]
+    [Route("")]
+    //[Route("api/[controller]")]
     public class ScannerManagerController : Controller
     {
         private readonly IScanService _scanService;
@@ -16,7 +17,7 @@ namespace Antivirus.API.Controllers
             _scanService = scanService;
         }
 
-        [HttpGet]
+        [HttpGet("test")]
         public async Task<ScanResult> Test(string path)
         {
             var result = await _scanService.ScanAsync(path);
