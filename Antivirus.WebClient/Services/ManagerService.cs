@@ -1,4 +1,5 @@
-﻿using Antivirus.WebClient.Interfaces;
+﻿using Antivirus.WebClient.Exceptions;
+using Antivirus.WebClient.Interfaces;
 using Antivirus.WebClient.Results;
 
 namespace Antivirus.WebClient.Services;
@@ -29,8 +30,15 @@ public class ManagerService : IManagerService
         using (var client = _factory.CreateHttpClient())
         {
             var query = $"?id={id}";
-            var status = await client.GetAsync<ScanStatus>(query);
-            return status;
+            try
+            {
+                var status = await client.GetAsync<ScanStatus>(query);
+                return status;
+            }
+            catch (NotFoundException)
+            {
+                throw new ScanNotFoundException(id, $"Scan with ID {id} not found.");
+            }
         }
     }
 }
