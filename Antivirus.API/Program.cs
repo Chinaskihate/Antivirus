@@ -1,4 +1,5 @@
 using System.Reflection;
+using Antivirus.API.Middleware;
 using Antivirus.Application;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +34,7 @@ void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         app.UseSwaggerUI(c => app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Kasp V1")));
     }
 
+    app.UseCustomExceptionHandler();
     app.UseHttpsRedirection();
     app.UseRouting();
 
