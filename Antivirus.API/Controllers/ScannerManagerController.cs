@@ -1,4 +1,5 @@
-﻿using Antivirus.Application.Interfaces.ScanManagers;
+﻿using Antivirus.API.Models;
+using Antivirus.Application.Interfaces.ScanManagers;
 using Antivirus.Application.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,9 +18,9 @@ public class ScannerManagerController : Controller
     }
 
     [HttpPost]
-    public async Task<int> CreateScan(string path)
+    public async Task<int> CreateScan([FromBody] CreateScanRequest request)
     {
-        var result = _scanManager.CreateScan(path);
+        var result = _scanManager.CreateScan(request.Path);
         return result;
     }
 

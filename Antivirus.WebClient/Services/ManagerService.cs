@@ -12,12 +12,24 @@ public class ManagerService : IManagerService
         _factory = factory;
     }
 
-    public async Task<ScanResult> ScanAsync(string path)
+    public async Task<int> CreateScanAsync(string path)
     {
         using (var client = _factory.CreateHttpClient())
         {
-            string query = $"test?path={System.Web.HttpUtility.UrlEncode(path)}";
-            var status = await client.GetAsync<ScanResult>(query);
+            var id = await client.PostAsync<int>("", new Dictionary<string, string>()
+            {
+                {"Path", path }
+            });
+            return id;
+        }
+    }
+
+    public async Task<ScanStatus> GetStatusAsync(int id)
+    {
+        using (var client = _factory.CreateHttpClient())
+        {
+            var query = $"?id={id}";
+            var status = await client.GetAsync<ScanStatus>(query);
             return status;
         }
     }

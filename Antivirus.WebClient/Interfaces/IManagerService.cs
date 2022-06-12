@@ -4,5 +4,7 @@ namespace Antivirus.WebClient.Interfaces;
 
 public interface IManagerService
 {
-    Task<ScanResult> ScanAsync(string path);
+    Task<int> CreateScanAsync(string path);
+
+    Task<ScanStatus> GetStatusAsync(int id);
 }
