@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Antivirus.Application\Antivirus.Application.csproj" />
     <ProjectReference Include="..\Antivirus.WebClient\Antivirus.WebClient.csproj" />
   </ItemGroup>
 
