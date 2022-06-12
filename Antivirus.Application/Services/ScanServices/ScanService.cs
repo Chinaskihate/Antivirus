@@ -9,24 +9,20 @@ public class ScanService : IScanService
     private readonly object _locker = new();
 
     /// <summary>
-    ///     Current scanning file.
-    /// </summary>
-    public string CurrentFile { get; private set; } = string.Empty;
-
-    /// <summary>
     ///     Scans directory asynchronously.
     /// </summary>
     /// <param name="path"> Path to directory. </param>
     /// <returns> Scan result(task). </returns>
-    public async Task<ScanResult> ScanAsync(string path)
+    public ScanResult ScanAsync(string path)
     {
         var watch = Stopwatch.StartNew();
         var res = new ScanResult();
-        CurrentFile = path;
-        await Task.Run(() => res = ScanDirectory(path));
-        watch.Stop();
-        CurrentFile = string.Empty;
-        res.ExecutionTime = TimeSpan.FromMilliseconds(watch.ElapsedMilliseconds);
+        Task.Run(() =>
+        {
+            ScanDirectory(path, res);
+            watch.Stop();
+            res.FinishTime=DateTime.Now;
+        });
 
         return res;
     }
@@ -36,30 +32,23 @@ public class ScanService : IScanService
     /// </summary>
     /// <param name="path"> Path to directory. </param>
     /// <returns> Scan result. </returns>
-    private ScanResult ScanDirectory(string path)
+    private void ScanDirectory(string path, ScanResult res)
     {
-        var res = new ScanResult();
-        CurrentFile = path;
         try
         {
             var files = Directory.GetFiles(path);
-            res += ScanFiles(files);
+            ScanFiles(files, res);
             var subdirectories = Directory.GetDirectories(path);
-            Parallel.ForEach(subdirectories, subdirectory =>
+            Parallel.ForEach(subdirectories, subDirectory =>
             {
-                var directoryResult = ScanDirectory(subdirectory);
-                lock (_locker)
-                {
-                    res += directoryResult;
-                }
+                ScanDirectory(subDirectory, res);
             });
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             res.TotalErrors++;
+            res.ErrorMessages.Add(ex.Message);
         }
-
-        return res;
     }
 
     /// <summary>
@@ -67,26 +56,23 @@ public class ScanService : IScanService
     /// </summary>
     /// <param name="files"> Paths to files. </param>
     /// <returns> Scan result. </returns>
-    private ScanResult ScanFiles(string[] files)
+    private void ScanFiles(string[] files, ScanResult res)
     {
-        var res = new ScanResult();
         res.TotalProcessedFiles += files.Length;
         Parallel.ForEach(files, file =>
         {
             try
             {
-                CurrentFile = file;
                 var isJs = Path.GetExtension(file).Equals(".js");
                 Parallel.ForEach(File.ReadLines(file),
-                    line => { ProcessMalwareType(ref res, LineAnalyzer.Analyze(line, isJs)); });
+                    line => { ProcessMalwareType(res, LineAnalyzer.Analyze(line, isJs)); });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 res.TotalErrors++;
+                res.ErrorMessages.Add(ex.Message);
             }
         });
-
-        return res;
     }
 
     /// <summary>
@@ -94,7 +80,7 @@ public class ScanService : IScanService
     /// </summary>
     /// <param name="res"> Scan result. </param>
     /// <param name="malwareType"> Malware type. </param>
-    private void ProcessMalwareType(ref ScanResult res, Malware malwareType)
+    private void ProcessMalwareType(ScanResult res, Malware malwareType)
     {
         lock (_locker)
         {

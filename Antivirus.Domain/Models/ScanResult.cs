@@ -1,19 +1,12 @@
-﻿using System.Text;
-
-namespace Antivirus.Domain.Models;
+﻿namespace Antivirus.Domain.Models;
 
 /// <summary>
 ///     Result of scan.
 /// </summary>
-public struct ScanResult
+public class ScanResult
 {
     private static readonly object Locker = new();
-    private int _totalProcessedFiles = 0;
-
-    public ScanResult()
-    {
-        
-    }
+    private int _totalProcessedFiles;
 
     /// <summary>
     ///     Total files processed.
@@ -33,49 +26,40 @@ public struct ScanResult
     /// <summary>
     ///     Total evil javascripts detects.
     /// </summary>
-    public int TotalEvilJsDetects { get; set; } = 0;
+    public int TotalEvilJsDetects { get; set; }
 
     /// <summary>
     ///     Total rm -rf detects.
     /// </summary>
-    public int TotalRemoveDetects { get; set; } = 0;
+    public int TotalRemoveDetects { get; set; }
 
     /// <summary>
     ///     Total Rundll32 sus.dll SusEntry detects.
     /// </summary>
-    public int TotalRunDllDetects { get; set; } = 0;
+    public int TotalRunDllDetects { get; set; }
 
     /// <summary>
     ///     Total errors.
     /// </summary>
-    public int TotalErrors { get; set; } = 0;
+    public int TotalErrors { get; set; }
 
     /// <summary>
-    ///     Scan execution time.
+    ///     Scan start time.
     /// </summary>
-    public TimeSpan ExecutionTime { get; set; } = TimeSpan.Zero;
+    public DateTime StartTime { get; set; } = DateTime.Now;
 
     /// <summary>
-    ///     Concats two scan results.
+    ///     Scan finish time.
     /// </summary>
-    /// <param name="first"> First scan result. </param>
-    /// <param name="second"> Second scan result. </param>
-    /// <returns> New scan result. </returns>
-    public static ScanResult operator +(ScanResult first, ScanResult second)
-    {
-        lock (Locker)
-        {
-            var res = new ScanResult
-            {
-                TotalProcessedFiles = first.TotalProcessedFiles + second.TotalProcessedFiles,
-                TotalEvilJsDetects = first.TotalEvilJsDetects + second.TotalEvilJsDetects,
-                TotalRemoveDetects = first.TotalRemoveDetects + second.TotalRemoveDetects,
-                TotalRunDllDetects = first.TotalRunDllDetects + second.TotalRunDllDetects,
-                TotalErrors = first.TotalErrors + second.TotalErrors,
-                ExecutionTime = first.ExecutionTime + second.ExecutionTime
-            };
+    public DateTime? FinishTime { get; set; }
 
-            return res;
-        }
-    }
+    /// <summary>
+    ///     Is scan finished.
+    /// </summary>
+    public bool IsFinished => FinishTime != null;
+
+    /// <summary>
+    ///     Error messages.
+    /// </summary>
+    public List<string> ErrorMessages { get; set; } = new();
 }

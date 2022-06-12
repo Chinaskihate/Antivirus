@@ -9,14 +9,14 @@ namespace Antivirus.Application.Services.ScanManagers;
 
 public class ScanManager : IScanManager
 {
-    private readonly ConcurrentDictionary<Guid, Task<ScanResult>> _tasks;
+    private readonly ConcurrentDictionary<Guid, ScanResult> _tasks;
 
     /// <summary>
     ///     Constructor.
     /// </summary>
     public ScanManager()
     {
-        _tasks = new ConcurrentDictionary<Guid, Task<ScanResult>>();
+        _tasks = new ConcurrentDictionary<Guid, ScanResult>();
     }
 
     public Guid CreateScan(string path)
@@ -44,8 +44,8 @@ public class ScanManager : IScanManager
 
         return new ScanStatus
         {
-            IsCompleted = currTask.IsCompleted,
-            Result = currTask.IsCompleted ? currTask.Result : new ScanResult()
+            IsCompleted = currTask.IsFinished,
+            Result = currTask
         };
     }
 }
