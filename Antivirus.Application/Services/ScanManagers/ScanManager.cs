@@ -9,21 +9,21 @@ namespace Antivirus.Application.Services.ScanManagers;
 
 public class ScanManager : IScanManager
 {
-    private readonly ConcurrentDictionary<Guid, Task<ScanResult>> _tasks;
+    private readonly ConcurrentDictionary<Guid, ScanStatus> _statuses;
 
     /// <summary>
     ///     Constructor.
     /// </summary>
     public ScanManager()
     {
-        _tasks = new ConcurrentDictionary<Guid, Task<ScanResult>>();
+        _statuses = new ConcurrentDictionary<Guid, ScanStatus>();
     }
 
     public Guid CreateScan(string path)
     {
         var id = Guid.NewGuid();
         IScanService service = new ScanService();
-        if (_tasks.TryAdd(id, service.ScanAsync(path)))
+        if (_statuses.TryAdd(id, service.Scan(path)))
         {
             return id;
         }
@@ -33,19 +33,19 @@ public class ScanManager : IScanManager
         return Guid.Empty;
     }
 
-    public ScanStatus GetStatus(Guid id)
+    public ScanStatusDto GetStatus(Guid id)
     {
-        if (!_tasks.ContainsKey(id))
+        if (!_statuses.ContainsKey(id))
         {
             throw new ArgumentException($"Scan {id} doesn't exist.");
         }
 
-        var currTask = _tasks[id];
+        var currStatus = _statuses[id];
 
-        return new ScanStatus
+        return new ScanStatusDto
         {
-            IsCompleted = currTask.IsCompleted,
-            Result = currTask.IsCompleted ? currTask.Result : new ScanResult()
+            IsCompleted = currStatus.IsFinished,
+            Status = currStatus
         };
     }
 }

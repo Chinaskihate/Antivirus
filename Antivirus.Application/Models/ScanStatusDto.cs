@@ -2,9 +2,9 @@
 
 namespace Antivirus.Application.Models;
 
-public class ScanStatus
+public class ScanStatusDto
 {
     public bool IsCompleted { get; set; }
 
-    public ScanResult Result { get; set; }
+    public ScanStatus Status { get; set; }
 }

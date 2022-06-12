@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Antivirus.Application.Interfaces.ScanServices;
+﻿using Antivirus.Application.Interfaces.ScanServices;
 using Antivirus.Domain.Models;
 
 namespace Antivirus.Application.Services.ScanServices;
@@ -14,19 +13,24 @@ public class ScanService : IScanService
     public string CurrentFile { get; private set; } = string.Empty;
 
     /// <summary>
-    ///     Scans directory asynchronously.
+    ///     Scans directory.
     /// </summary>
     /// <param name="path"> Path to directory. </param>
-    /// <returns> Scan result(task). </returns>
-    public async Task<ScanResult> ScanAsync(string path)
+    /// <returns> Scan result. </returns>
+    public ScanStatus Scan(string path)
     {
-        var watch = Stopwatch.StartNew();
-        var res = new ScanResult();
+        var res = new ScanStatus
+        {
+            FilesToProcess = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories).Count()
+        };
         CurrentFile = path;
-        await Task.Run(() => res = ScanDirectory(path));
-        watch.Stop();
-        CurrentFile = string.Empty;
-        res.ExecutionTime = TimeSpan.FromMilliseconds(watch.ElapsedMilliseconds);
+        Task.Run(() =>
+        {
+            ScanDirectory(path, res);
+            res.FinishTime = DateTime.Now;
+            res.IsFinished = true;
+            return res;
+        });
 
         return res;
     }
@@ -36,30 +40,26 @@ public class ScanService : IScanService
     /// </summary>
     /// <param name="path"> Path to directory. </param>
     /// <returns> Scan result. </returns>
-    private ScanResult ScanDirectory(string path)
+    private void ScanDirectory(string path, ScanStatus status)
     {
-        var res = new ScanResult();
         CurrentFile = path;
         try
         {
             var files = Directory.GetFiles(path);
-            res += ScanFiles(files);
+            ScanFiles(files, status);
             var subdirectories = Directory.GetDirectories(path);
-            Parallel.ForEach(subdirectories, subdirectory =>
+            Parallel.ForEach(subdirectories, subDirectory =>
             {
-                var directoryResult = ScanDirectory(subdirectory);
-                lock (_locker)
-                {
-                    res += directoryResult;
-                }
+                ScanDirectory(subDirectory, status);
             });
         }
         catch (Exception)
         {
-            res.TotalErrors++;
+            lock (_locker)
+            {
+                status.TotalErrors++;
+            }
         }
-
-        return res;
     }
 
     /// <summary>
@@ -67,10 +67,9 @@ public class ScanService : IScanService
     /// </summary>
     /// <param name="files"> Paths to files. </param>
     /// <returns> Scan result. </returns>
-    private ScanResult ScanFiles(string[] files)
+    private void ScanFiles(string[] files, ScanStatus status)
     {
-        var res = new ScanResult();
-        res.TotalProcessedFiles += files.Length;
+        status.ProcessedFiles += files.Length;
         Parallel.ForEach(files, file =>
         {
             try
@@ -78,36 +77,37 @@ public class ScanService : IScanService
                 CurrentFile = file;
                 var isJs = Path.GetExtension(file).Equals(".js");
                 Parallel.ForEach(File.ReadLines(file),
-                    line => { ProcessMalwareType(ref res, LineAnalyzer.Analyze(line, isJs)); });
+                    line => { ProcessMalwareType(status, LineAnalyzer.Analyze(line, isJs)); });
             }
             catch (Exception)
             {
-                res.TotalErrors++;
+                lock (_locker)
+                {
+                    status.TotalErrors++;
+                }
             }
         });
-
-        return res;
     }
 
     /// <summary>
     ///     Processes malware type, change scan result if needed.
     /// </summary>
-    /// <param name="res"> Scan result. </param>
+    /// <param name="status"> Scan result. </param>
     /// <param name="malwareType"> Malware type. </param>
-    private void ProcessMalwareType(ref ScanResult res, Malware malwareType)
+    private void ProcessMalwareType(ScanStatus status, Malware malwareType)
     {
         lock (_locker)
         {
             switch (malwareType)
             {
                 case Malware.EvilJs:
-                    res.TotalEvilJsDetects++;
+                    status.TotalEvilJsDetects++;
                     break;
                 case Malware.Remover:
-                    res.TotalRemoveDetects++;
+                    status.TotalRemoveDetects++;
                     break;
                 case Malware.DllRunner:
-                    res.TotalRunDllDetects++;
+                    status.TotalRunDllDetects++;
                     break;
             }
         }

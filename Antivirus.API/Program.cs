@@ -22,6 +22,15 @@ void RegisterServices(IServiceCollection services, IConfiguration config)
         c.IncludeXmlComments(xmlPath);
     });
     services.AddApiVersioning();
+    services.AddCors(options =>
+    {
+        options.AddPolicy("AllowAll", policy =>
+        {
+            policy.AllowAnyHeader();
+            policy.AllowAnyMethod();
+            policy.AllowAnyOrigin();
+        });
+    });
 }
 
 void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -35,6 +44,7 @@ void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 
     app.UseHttpsRedirection();
     app.UseRouting();
+    app.UseCors("AllowAll");
 
     app.UseEndpoints(endpoints => endpoints.MapControllers());
 }

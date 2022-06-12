@@ -4,5 +4,5 @@ namespace Antivirus.Application.Interfaces.ScanServices;
 
 public interface IScanService
 {
-    Task<ScanResult> ScanAsync(string path);
+    ScanStatus Scan(string path);
 }

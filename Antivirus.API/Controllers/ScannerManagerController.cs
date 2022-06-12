@@ -26,7 +26,7 @@ namespace Antivirus.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ScanStatus> GetScanStatus(Guid id)
+        public async Task<ScanStatusDto> GetScanStatus(Guid id)
         {
             var result = _scanManager.GetStatus(id);
             return result;

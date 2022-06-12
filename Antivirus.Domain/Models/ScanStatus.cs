@@ -1,31 +1,28 @@
-﻿using System.Text;
-
-namespace Antivirus.Domain.Models;
+﻿namespace Antivirus.Domain.Models;
 
 /// <summary>
 ///     Result of scan.
 /// </summary>
-public struct ScanResult
+public class ScanStatus
 {
     private static readonly object Locker = new();
-    private int _totalProcessedFiles = 0;
+    private int _processedFiles = 0;
 
-    public ScanResult()
-    {
-        
-    }
+    public bool IsFinished { get; set; } = false;
+
+    public int FilesToProcess { get; set; } = 0;
 
     /// <summary>
     ///     Total files processed.
     /// </summary>
-    public int TotalProcessedFiles
+    public int ProcessedFiles
     {
-        get => _totalProcessedFiles;
+        get => _processedFiles;
         set
         {
             lock (Locker)
             {
-                _totalProcessedFiles = value;
+                _processedFiles = value;
             }
         }
     }
@@ -51,9 +48,21 @@ public struct ScanResult
     public int TotalErrors { get; set; } = 0;
 
     /// <summary>
-    ///     Scan execution time.
+    ///     Scan start time.
     /// </summary>
-    public TimeSpan ExecutionTime { get; set; } = TimeSpan.Zero;
+    public DateTime StartTime { get; set; } = DateTime.Now;
+
+    /// <summary>
+    ///     Scan finish time.
+    /// </summary>
+    public DateTime? FinishTime { get; set; } = null;
+    
+    /// <summary>
+    ///     Execution time.
+    /// </summary>
+    public TimeSpan ExecutionTime => FinishTime == null ? TimeSpan.Zero : (TimeSpan)(FinishTime - StartTime);
+
+
 
     /// <summary>
     ///     Concats two scan results.
@@ -61,18 +70,18 @@ public struct ScanResult
     /// <param name="first"> First scan result. </param>
     /// <param name="second"> Second scan result. </param>
     /// <returns> New scan result. </returns>
-    public static ScanResult operator +(ScanResult first, ScanResult second)
+    public static ScanStatus operator +(ScanStatus first, ScanStatus second)
     {
         lock (Locker)
         {
-            var res = new ScanResult
+            var res = new ScanStatus
             {
-                TotalProcessedFiles = first.TotalProcessedFiles + second.TotalProcessedFiles,
+                ProcessedFiles = first.ProcessedFiles + second.ProcessedFiles,
                 TotalEvilJsDetects = first.TotalEvilJsDetects + second.TotalEvilJsDetects,
                 TotalRemoveDetects = first.TotalRemoveDetects + second.TotalRemoveDetects,
                 TotalRunDllDetects = first.TotalRunDllDetects + second.TotalRunDllDetects,
                 TotalErrors = first.TotalErrors + second.TotalErrors,
-                ExecutionTime = first.ExecutionTime + second.ExecutionTime
+                StartTime = first.StartTime > second.StartTime ? first.StartTime : second.StartTime
             };
 
             return res;
