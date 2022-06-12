@@ -2,6 +2,7 @@
 using Antivirus.Application.Common.Exceptions;
 using Antivirus.Application.Interfaces.ScanManagers;
 using Antivirus.Application.Interfaces.ScanServices;
+using Antivirus.Application.Models;
 using Antivirus.Application.Services.ScanServices;
 using Antivirus.Domain.Models;
 
@@ -21,7 +22,7 @@ public class ScanManager : IScanManager
 
     public int CreateScan(string path)
     {
-        int id = _tasks.Count;
+        var id = _tasks.Count;
         IScanService service = new ScanService();
         if (_tasks.TryAdd(id, service.Scan(path)))
         {
@@ -31,13 +32,26 @@ public class ScanManager : IScanManager
         return -1;
     }
 
-    public ScanStatus GetStatus(int id)
+    public ScanStatusDto GetStatus(int id)
     {
         if (!_tasks.ContainsKey(id))
         {
             throw new ScanNotFoundException(id, $"Scan {id} doesn't exist.");
         }
 
-        return _tasks[id];
+        var status = _tasks[id];
+
+        return new ScanStatusDto
+        {
+            TotalProcessedFiles = status.TotalProcessedFiles,
+            TotalEvilJsDetects = status.TotalEvilJsDetects,
+            TotalRemoveDetects = status.TotalRemoveDetects,
+            TotalRunDllDetects = status.TotalRunDllDetects,
+            ExecutionTime = status.IsFinished
+                ? (DateTime)status.FinishTime - status.StartTime
+                : DateTime.Now - status.StartTime,
+            IsFinished = status.IsFinished,
+            ErrorMessages = status.ErrorMessages
+        };
     }
 }

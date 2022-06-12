@@ -1,27 +1,11 @@
-﻿namespace Antivirus.Domain.Models;
+﻿namespace Antivirus.Application.Models;
 
-/// <summary>
-///     Result of scan.
-/// </summary>
-public class ScanStatus
+public class ScanStatusDto
 {
-    private static readonly object Locker = new();
-    private int _totalProcessedFiles;
-
     /// <summary>
     ///     Total files processed.
     /// </summary>
-    public int TotalProcessedFiles
-    {
-        get => _totalProcessedFiles;
-        set
-        {
-            lock (Locker)
-            {
-                _totalProcessedFiles = value;
-            }
-        }
-    }
+    public int TotalProcessedFiles { get; set; }
 
     /// <summary>
     ///     Total evil javascripts detects.
@@ -39,19 +23,19 @@ public class ScanStatus
     public int TotalRunDllDetects { get; set; }
 
     /// <summary>
-    ///     Scan start time.
+    ///     Total errors.
     /// </summary>
-    public DateTime StartTime { get; set; } = DateTime.Now;
+    public int TotalErrors => ErrorMessages.Count;
 
     /// <summary>
-    ///     Scan finish time.
+    ///     Scan execution time.
     /// </summary>
-    public DateTime? FinishTime { get; set; }
-
+    public TimeSpan ExecutionTime { get; set; }
+    
     /// <summary>
     ///     Is scan finished.
     /// </summary>
-    public bool IsFinished => FinishTime != null;
+    public bool IsFinished { get; set; }
 
     /// <summary>
     ///     Error messages.

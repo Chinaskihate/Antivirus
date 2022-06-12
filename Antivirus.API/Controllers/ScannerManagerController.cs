@@ -1,5 +1,5 @@
 ﻿using Antivirus.Application.Interfaces.ScanManagers;
-using Antivirus.Domain.Models;
+using Antivirus.Application.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Antivirus.API.Controllers;
@@ -24,7 +24,7 @@ public class ScannerManagerController : Controller
     }
 
     [HttpGet]
-    public async Task<ScanStatus> GetScanStatus(int id)
+    public async Task<ScanStatusDto> GetScanStatus(int id)
     {
         var result = _scanManager.GetStatus(id);
         return result;

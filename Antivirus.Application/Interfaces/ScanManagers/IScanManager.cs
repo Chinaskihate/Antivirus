@@ -1,4 +1,5 @@
-﻿using Antivirus.Domain.Models;
+﻿using Antivirus.Application.Models;
+using Antivirus.Domain.Models;
 
 namespace Antivirus.Application.Interfaces.ScanManagers;
 
@@ -6,5 +7,5 @@ public interface IScanManager
 {
     int CreateScan(string path);
 
-    ScanStatus GetStatus(int id);
+    ScanStatusDto GetStatus(int id);
 }

@@ -46,7 +46,6 @@ public class ScanService : IScanService
         }
         catch (Exception ex)
         {
-            res.TotalErrors++;
             res.ErrorMessages.Add(ex.Message);
         }
     }
@@ -69,7 +68,6 @@ public class ScanService : IScanService
             }
             catch (Exception ex)
             {
-                res.TotalErrors++;
                 res.ErrorMessages.Add(ex.Message);
             }
         });
