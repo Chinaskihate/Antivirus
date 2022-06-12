@@ -1,5 +1,8 @@
 ﻿namespace Antivirus.WebClient.Exceptions;
 
+/// <summary>
+///     If scan is not found from WebAPI.
+/// </summary>
 public class ScanNotFoundException : Exception
 {
     public ScanNotFoundException(int id)

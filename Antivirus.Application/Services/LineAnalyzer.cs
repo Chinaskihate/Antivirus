@@ -3,6 +3,9 @@ using Antivirus.Domain.Models;
 
 namespace Antivirus.Application.Services;
 
+/// <summary>
+///     Helper for line analyzing.
+/// </summary>
 public static class LineAnalyzer
 {
     private static readonly string UserProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)

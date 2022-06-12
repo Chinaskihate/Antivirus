@@ -8,6 +8,9 @@ using Antivirus.Domain.Models;
 
 namespace Antivirus.Application.Services.ScanManagers;
 
+/// <summary>
+///     Manages multiple scans.
+/// </summary>
 public class ScanManager : IScanManager
 {
     private readonly ConcurrentDictionary<int, ScanStatus> _tasks;
@@ -20,6 +23,11 @@ public class ScanManager : IScanManager
         _tasks = new ConcurrentDictionary<int, ScanStatus>();
     }
 
+    /// <summary>
+    ///     Creates new scan.
+    /// </summary>
+    /// <param name="path"> Directory to scan. </param>
+    /// <returns> Id of scan. </returns>
     public int CreateScan(string path)
     {
         var id = _tasks.Count;
@@ -32,6 +40,12 @@ public class ScanManager : IScanManager
         return -1;
     }
 
+    /// <summary>
+    ///     Get status of scan.
+    /// </summary>
+    /// <param name="id"> Id of scan. </param>
+    /// <returns> Dto of scan status. </returns>
+    /// <exception cref="ScanNotFoundException"> If scan was not found. </exception>
     public ScanStatusDto GetStatus(int id)
     {
         if (!_tasks.ContainsKey(id))

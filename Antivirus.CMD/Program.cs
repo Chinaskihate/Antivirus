@@ -25,11 +25,14 @@ else
     PrintIncorrectCommandsMessage();
 }
 
+/// <summary>
+///     Process create scan command.
+/// </summary>
 async Task ProcessCreateScanCommand(string path)
 {
     try
     {
-        int id = await CreateScan(path);
+        var id = await CreateScan(path);
         Console.WriteLine($"Scan was created with ID: {id}");
     }
     catch (Exception ex)
@@ -38,6 +41,9 @@ async Task ProcessCreateScanCommand(string path)
     }
 }
 
+/// <summary>
+///     Process get status command.
+/// </summary>
 async Task ProcessGetStatusCommand(string str)
 {
     int id;
@@ -59,23 +65,35 @@ async Task ProcessGetStatusCommand(string str)
     }
 }
 
+/// <summary>
+///     Create new scan.
+/// </summary>
 async Task<int> CreateScan(string path)
 {
     return await service.CreateScanAsync(path);
 }
 
+/// <summary>
+///     Get status of scan.
+/// </summary>
 async Task<ScanStatus> GetStatus(int id)
 {
     return await service.GetStatusAsync(id);
 }
 
+/// <summary>
+///     Prints message if commands were incorrect.
+/// </summary>
 void PrintIncorrectCommandsMessage()
 {
     Console.WriteLine($"Incorrect command!{Environment.NewLine}" +
                       $"Use: scan <path to directory>{Environment.NewLine}" +
-                      $"Or: status <scan id>");
+                      "Or: status <scan id>");
 }
 
+/// <summary>
+///     Prints status of scan.
+/// </summary>
 void PrintStatus(ScanStatus status)
 {
     Console.WriteLine("====== SCAN STATUS ======");
@@ -86,13 +104,18 @@ void PrintStatus(ScanStatus status)
     Console.WriteLine($"RUNDLL32 DETECTS: {status.TotalRunDllDetects}");
     Console.WriteLine($"NUMBER OF ERRORS: {status.TotalErrors}");
     Console.WriteLine($"EXECUTION TIME: {status.ExecutionTime}");
-    Console.WriteLine($"ERRORS:");
+    Console.WriteLine("ERRORS:");
     foreach (var message in status.ErrorMessages)
     {
         Console.WriteLine($"\t{message}");
     }
+
+    Console.WriteLine();
 }
 
+/// <summary>
+///     Parse command type.
+/// </summary>
 CommandType ParseCommandType(string command)
 {
     if (command.ToLower() == "scan")
@@ -104,11 +127,14 @@ CommandType ParseCommandType(string command)
     {
         return CommandType.GetStatus;
     }
-    
+
     return CommandType.Invalid;
 }
 
-enum CommandType
+/// <summary>
+///     Type of command.
+/// </summary>
+internal enum CommandType
 {
     CreateScan,
     GetStatus,

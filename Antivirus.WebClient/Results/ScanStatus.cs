@@ -1,5 +1,8 @@
 ﻿namespace Antivirus.WebClient.Results;
 
+/// <summary>
+///     Scan status from WebAPI.
+/// </summary>
 public class ScanStatus
 {
     /// <summary>

@@ -1,5 +1,8 @@
 ﻿namespace Antivirus.Application.Models;
 
+/// <summary>
+///     Dto for scan status.
+/// </summary>
 public class ScanStatusDto
 {
     /// <summary>

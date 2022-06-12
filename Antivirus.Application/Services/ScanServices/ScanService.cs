@@ -4,15 +4,18 @@ using Antivirus.Domain.Models;
 
 namespace Antivirus.Application.Services.ScanServices;
 
+/// <summary>
+///     Service for scanning directory.
+/// </summary>
 public class ScanService : IScanService
 {
     private readonly object _locker = new();
 
     /// <summary>
-    ///     Scans directory asynchronously.
+    ///     Scans directory.
     /// </summary>
-    /// <param name="path"> Path to directory. </param>
-    /// <returns> Scan result(task). </returns>
+    /// <param name="path"> Directory to scan. </param>
+    /// <returns> Status of scan. </returns>
     public ScanStatus Scan(string path)
     {
         var watch = Stopwatch.StartNew();
@@ -30,8 +33,8 @@ public class ScanService : IScanService
     /// <summary>
     ///     Scans directory.
     /// </summary>
-    /// <param name="path"> Path to directory. </param>
-    /// <returns> Scan result. </returns>
+    /// <param name="path"> Directory to scan. </param>
+    /// <param name="res"> Scan status. </param>
     private void ScanDirectory(string path, ScanStatus res)
     {
         try
@@ -51,10 +54,10 @@ public class ScanService : IScanService
     }
 
     /// <summary>
-    ///     Scans files.
+    ///     Scans files in directory.
     /// </summary>
-    /// <param name="files"> Paths to files. </param>
-    /// <returns> Scan result. </returns>
+    /// <param name="files"> Files to scan. </param>
+    /// <param name="res"> Status of scan. </param>
     private void ScanFiles(string[] files, ScanStatus res)
     {
         res.TotalProcessedFiles += files.Length;
@@ -74,7 +77,7 @@ public class ScanService : IScanService
     }
 
     /// <summary>
-    ///     Processes malware type, change scan result if needed.
+    ///     Processes malware type, changes scan result if needed.
     /// </summary>
     /// <param name="res"> Scan result. </param>
     /// <param name="malwareType"> Malware type. </param>

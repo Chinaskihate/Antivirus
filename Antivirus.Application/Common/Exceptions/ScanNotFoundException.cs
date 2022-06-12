@@ -1,5 +1,8 @@
 ﻿namespace Antivirus.Application.Common.Exceptions;
 
+/// <summary>
+///     Thrown if scan was not found.
+/// </summary>
 public class ScanNotFoundException : Exception
 {
     public ScanNotFoundException(int id)
@@ -17,5 +20,8 @@ public class ScanNotFoundException : Exception
         Id = id;
     }
 
+    /// <summary>
+    ///     Id of scan.
+    /// </summary>
     public int Id { get; set; }
 }
