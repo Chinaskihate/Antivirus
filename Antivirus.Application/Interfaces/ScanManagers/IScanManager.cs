@@ -1,5 +1,4 @@
-﻿using Antivirus.Application.Models;
-using Antivirus.Domain.Models;
+﻿using Antivirus.Domain.Models;
 
 namespace Antivirus.Application.Interfaces.ScanManagers;
 

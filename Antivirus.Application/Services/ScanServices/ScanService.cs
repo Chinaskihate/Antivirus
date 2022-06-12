@@ -13,10 +13,10 @@ public class ScanService : IScanService
     /// </summary>
     /// <param name="path"> Path to directory. </param>
     /// <returns> Scan result(task). </returns>
-    public ScanResult ScanAsync(string path)
+    public ScanStatus Scan(string path)
     {
         var watch = Stopwatch.StartNew();
-        var res = new ScanResult();
+        var res = new ScanStatus();
         Task.Run(() =>
         {
             ScanDirectory(path, res);
@@ -32,7 +32,7 @@ public class ScanService : IScanService
     /// </summary>
     /// <param name="path"> Path to directory. </param>
     /// <returns> Scan result. </returns>
-    private void ScanDirectory(string path, ScanResult res)
+    private void ScanDirectory(string path, ScanStatus res)
     {
         try
         {
@@ -56,7 +56,7 @@ public class ScanService : IScanService
     /// </summary>
     /// <param name="files"> Paths to files. </param>
     /// <returns> Scan result. </returns>
-    private void ScanFiles(string[] files, ScanResult res)
+    private void ScanFiles(string[] files, ScanStatus res)
     {
         res.TotalProcessedFiles += files.Length;
         Parallel.ForEach(files, file =>
@@ -80,7 +80,7 @@ public class ScanService : IScanService
     /// </summary>
     /// <param name="res"> Scan result. </param>
     /// <param name="malwareType"> Malware type. </param>
-    private void ProcessMalwareType(ScanResult res, Malware malwareType)
+    private void ProcessMalwareType(ScanStatus res, Malware malwareType)
     {
         lock (_locker)
         {

@@ -3,7 +3,7 @@
 /// <summary>
 ///     Result of scan.
 /// </summary>
-public class ScanResult
+public class ScanStatus
 {
     private static readonly object Locker = new();
     private int _totalProcessedFiles;
