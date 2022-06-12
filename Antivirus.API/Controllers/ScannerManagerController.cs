@@ -17,14 +17,14 @@ public class ScannerManagerController : Controller
     }
 
     [HttpPost]
-    public async Task<Guid> CreateScan(string path)
+    public async Task<int> CreateScan(string path)
     {
         var result = _scanManager.CreateScan(path);
         return result;
     }
 
     [HttpGet]
-    public async Task<ScanStatus> GetScanStatus(Guid id)
+    public async Task<ScanStatus> GetScanStatus(int id)
     {
         var result = _scanManager.GetStatus(id);
         return result;

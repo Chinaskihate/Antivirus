@@ -4,7 +4,7 @@ namespace Antivirus.Application.Interfaces.ScanManagers;
 
 public interface IScanManager
 {
-    Guid CreateScan(string apth);
+    int CreateScan(string path);
 
-    ScanStatus GetStatus(Guid id);
+    ScanStatus GetStatus(int id);
 }
