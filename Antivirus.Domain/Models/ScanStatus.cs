@@ -24,6 +24,11 @@ public class ScanStatus
     }
 
     /// <summary>
+    ///     Directory to scan.
+    /// </summary>
+    public string Path { get; set; }
+
+    /// <summary>
     ///     Total evil javascripts detects.
     /// </summary>
     public int TotalEvilJsDetects { get; set; }

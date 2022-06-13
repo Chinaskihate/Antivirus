@@ -19,7 +19,10 @@ public class ScanService : IScanService
     public ScanStatus Scan(string path)
     {
         var watch = Stopwatch.StartNew();
-        var res = new ScanStatus();
+        var res = new ScanStatus()
+        {
+            Path = path
+        };
         Task.Run(() =>
         {
             ScanDirectory(path, res);

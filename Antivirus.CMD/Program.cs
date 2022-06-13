@@ -3,7 +3,7 @@ using Antivirus.WebClient.Interfaces;
 using Antivirus.WebClient.Results;
 using Antivirus.WebClient.Services;
 
-IManagerService service = new ManagerService(new ManagerHttpClientFactory("https://localhost:7000/api/ScannerManager"));
+IManagerService service = new ManagerService(new ManagerHttpClientFactory("https://localhost:5001/api/ScannerManager"));
 
 if (args.Length == 2)
 {
@@ -97,6 +97,7 @@ void PrintIncorrectCommandsMessage()
 void PrintStatus(ScanStatus status)
 {
     Console.WriteLine("====== SCAN STATUS ======");
+    Console.WriteLine($"DIRECTORY TO SCAN: {status.Path}");
     Console.WriteLine($"FINISHED: {(status.IsFinished ? "YES" : "NO")}");
     Console.WriteLine($"PROCESSED FILES: {status.TotalProcessedFiles}");
     Console.WriteLine($"JS DETECTS: {status.TotalEvilJsDetects}");

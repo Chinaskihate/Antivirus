@@ -61,6 +61,7 @@ public class ScanManager : IScanManager
             TotalEvilJsDetects = status.TotalEvilJsDetects,
             TotalRemoveDetects = status.TotalRemoveDetects,
             TotalRunDllDetects = status.TotalRunDllDetects,
+            Path = status.Path,
             ExecutionTime = status.IsFinished
                 ? (DateTime)status.FinishTime - status.StartTime
                 : DateTime.Now - status.StartTime,

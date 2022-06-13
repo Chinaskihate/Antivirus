@@ -16,6 +16,11 @@ public class ScanStatus
     public int TotalEvilJsDetects { get; set; }
 
     /// <summary>
+    ///     Directory to scan.
+    /// </summary>
+    public string Path { get; set; }
+
+    /// <summary>
     ///     Total rm -rf detects.
     /// </summary>
     public int TotalRemoveDetects { get; set; }
